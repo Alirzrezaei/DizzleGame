@@ -1,0 +1,80 @@
+/*
+ * This application is a game project developed by Alireza Rezaei ITE102772
+ * The purpose is for Advanced Programming course.
+ */
+package logic;
+
+import java.util.List;
+
+/**
+ *
+ * @author Rezaei
+ */
+public class Bot extends Player {
+
+    public Bot(Board board, boolean isBot) {
+        super(board, isBot);
+    }
+    
+    protected BotChoose ai(int level, List<Integer> dices) {
+        Position pos = null;
+        BotChoose choose = null;
+        List<Position> neighbors = this.getBoard().highlightList(dices);
+        
+        for (int i = 0; i < this.getBoard().getField().length; i++) {
+            for (int j = 0; j < this.getBoard().getField()[i].length; j++) {
+                if(this.getBoard().getField()[i][j] != null && !this.getBoard().getField()[i][j].isCrossed() 
+                        && !this.getBoard().getField()[i][j].isOccupied() && !this.getBoard().getField()[i][j].isExploded()){
+                    Position temp = new Position(i, j);
+                    if(this.getBoard().contiain(neighbors, temp)){
+                        if(choose == null){
+                            choose = new BotChoose(temp, this.getBoard().getField()[i][j].getPoint(), this.getBoard().getField()[i][j].getObject());    
+                        }else{
+                            choose = posCompare(choose, new BotChoose(temp, this.getBoard().getField()[i][j].getPoint(), 
+                                    this.getBoard().getField()[i][j].getObject()));
+                        }
+                    }
+                }
+            }
+        }
+        return choose;
+    }
+    
+    private BotChoose posCompare(BotChoose choose, BotChoose temp){
+        
+        
+        if(this.getBoard().getField()[temp.getPos().getX()][temp.getPos().getY()].getObject().getPriority() < 
+               this.getBoard().getField()[choose.getPos().getX()][choose.getPos().getY()].getObject().getPriority()){
+            choose = temp;
+        }else if(choose.getType() == temp.getType() && choose.getPoint() < temp.getPoint()){
+            choose = temp;
+        }
+        else{
+            if(choose.getType() == ObjectTypes.noType){
+                if(this.getBoard().isBothLines(temp.getPos())){
+                    choose = new BotChoose(temp.getPos(), this.getBoard().isHorizontalLine(temp.getPos()) + this.getBoard().isVerticalLine(temp.getPos()),  
+                            ObjectTypes.horizontalLine);
+                }else{
+                    if(this.getBoard().isHorizontalLine(temp.getPos()) > 0){
+                        choose = new BotChoose(temp.getPos(), this.getBoard().isHorizontalLine(temp.getPos()), ObjectTypes.horizontalLine);
+                    }
+                    if(this.getBoard().isVerticalLine(temp.getPos()) > 0){
+                        choose = new BotChoose(temp.getPos(), this.getBoard().isVerticalLine(temp.getPos()), ObjectTypes.verticalLine);
+                    }
+                }
+            }else{
+                if(choose.getType() == ObjectTypes.horizontalLine && this.getBoard().isHorizontalLine(temp.getPos()) > choose.getPoint()){
+                    choose = new BotChoose(temp.getPos(), this.getBoard().isHorizontalLine(temp.getPos()), ObjectTypes.horizontalLine);
+                }
+                if(choose.getType() == ObjectTypes.verticalLine && this.getBoard().isVerticalLine(temp.getPos()) > choose.getPoint()){
+                    choose = new BotChoose(temp.getPos(), this.getBoard().isVerticalLine(temp.getPos()), ObjectTypes.verticalLine);
+                }
+            
+            }
+            
+            
+        }
+        
+        return choose;
+    }
+}

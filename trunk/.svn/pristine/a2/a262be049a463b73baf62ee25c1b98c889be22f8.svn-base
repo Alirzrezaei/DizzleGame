@@ -1,0 +1,37 @@
+/*
+ * This application is a game project developed by Alireza Rezaei ITE102772
+ * The purpose is for Advanced Programming course.
+ */
+package logic;
+
+/**
+ *
+ * @author Alireza
+ */
+public class Scores {
+    private int point;
+    private ObjectTypes type;
+    
+    Scores(int point, ObjectTypes type){
+        this.point = point;
+        this.type = type;
+    }
+
+    public int getPoint() {
+        return point;
+    }
+
+    public ObjectTypes getType() {
+        return type;
+    }
+
+    public void setPoint(int point) {
+        this.point = point;
+    }
+
+    public void setType(ObjectTypes type) {
+        this.type = type;
+    }
+    
+    
+}

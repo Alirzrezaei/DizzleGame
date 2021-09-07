@@ -1,0 +1,30 @@
+/*
+ * This application is a game project developed by Alireza Rezaei ITE102772
+ * The purpose is for Advanced Programming course.
+ */
+package logic;
+
+/**
+ * 
+ * @author Rezaei
+ */
+public class Game {
+    private Player players[];
+    private GUIConnector gui;
+    private int level;
+    private IO io;
+    
+    
+    public Game(GUIConnector gui, int level, int noOfPlayers){
+        this.gui = gui; 
+        this.io = new IO();
+        this.level = level;
+        this.players = new Player[noOfPlayers];
+        
+        System.out.println("level and players are: "+ level +", "+noOfPlayers);
+        LevelReader levelObj = io.jsonParser(level);
+        
+        this.gui.addImgsToAllGridPanes(levelObj, noOfPlayers);
+        
+    }
+}

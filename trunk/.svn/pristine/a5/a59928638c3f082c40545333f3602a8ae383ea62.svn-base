@@ -1,0 +1,20 @@
+/*
+ * This application is a game project developed by Alireza Rezaei ITE102772
+ * The purpose is for Advanced Programming course.
+ */
+package logic;
+
+/**
+ *
+ * @author Rezaei
+ */
+public class IO {
+    
+    private final String path = "levels/Level";
+    private final String ext = ".json";
+    
+    
+    protected void jsonParser(int level){
+        
+    }
+}

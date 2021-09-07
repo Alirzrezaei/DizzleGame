@@ -1,0 +1,31 @@
+/*
+ * This application is a game project developed by Alireza Rezaei ITE102772
+ * The purpose is for Advanced Programming course.
+ */
+package logic;
+
+import org.junit.Test;
+import static org.junit.Assert.*;
+
+/**
+ *
+ * @author Alireza
+ */
+public class BotTest {
+    
+    public BotTest() {
+    }
+
+    @Test
+    public void testConstructor() {
+        Player bot = new Bot(new Board(new IO().jsonParser(1, new FakeGUI()), 1), true);
+        
+        assertEquals(9, bot.getBoard().getField().length);
+        assertEquals(7, bot.getBoard().getField()[0].length);
+        assertTrue(bot.isBot());
+        
+    }
+    
+    
+    
+}

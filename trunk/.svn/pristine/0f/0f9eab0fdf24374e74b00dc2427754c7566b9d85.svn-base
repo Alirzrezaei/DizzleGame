@@ -1,0 +1,8 @@
+<#if licenseFirst??>
+${licenseFirst}
+</#if>
+${licensePrefix}This application is a game project developed by Alireza Rezaei ITE102772
+${licensePrefix}The purpose is for Advanced Programming course.
+<#if licenseLast??>
+${licenseLast}
+</#if>

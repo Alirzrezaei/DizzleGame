@@ -1,0 +1,53 @@
+/*
+ * This application is a game project developed by Alireza Rezaei ITE102772
+ * The purpose is for Advanced Programming course.
+ */
+package logic;
+
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
+
+/**
+ * 
+ * @author Rezaei
+ */
+public class Game {
+    private Player players[];
+    private GUIConnector gui;
+    private int level;
+    private IO io;
+    private List<Integer> dices;
+    
+    
+    public Game(GUIConnector gui, int level, int noOfPlayers){
+        this.gui = gui; 
+        this.io = new IO();
+        this.level = level;
+        this.players = new Player[noOfPlayers];
+        this.dices = new LinkedList<>();
+        
+        System.out.println("level and players are: "+ level +", "+noOfPlayers);
+        LevelReader levelObj = io.jsonParser(level);
+        
+        
+        fillDices(noOfPlayers);
+        this.gui.setDicesOnGridPane(dices);
+        this.gui.addImgsToAllGridPanes(levelObj, noOfPlayers, level);
+        
+        
+    }
+    
+    private void fillDices(int noOfPlayer){
+        Random rand = new Random();
+        
+        for (int i = 0; i < (noOfPlayer * 3 + 1); i++) {
+            dices.add((int)(Math.random()*((6-1)+1))+1);
+        }
+        Collections.sort(dices);
+      
+    }
+    
+    
+}

@@ -1,0 +1,48 @@
+{
+  "levelNo": 1,
+  "round": 0,
+  "turnOf": 0,
+  "dice": [
+    1,
+    1,
+    2,
+    3,
+    5,
+    6,
+    6
+  ],
+  "players": [
+    {
+      "active": true,
+      "checked": [
+        {
+          "x": 4,
+          "y": 3
+        },
+        {
+          "x": 4,
+          "y": 4
+        }
+      ],
+      "diceOn": [],
+      "exploded": [],
+      "flagReachedAs": 0
+    },
+    {
+      "active": true,
+      "checked": [
+        {
+          "x": 4,
+          "y": 3
+        },
+        {
+          "x": 4,
+          "y": 4
+        }
+      ],
+      "diceOn": [],
+      "exploded": [],
+      "flagReachedAs": 0
+    }
+  ]
+}

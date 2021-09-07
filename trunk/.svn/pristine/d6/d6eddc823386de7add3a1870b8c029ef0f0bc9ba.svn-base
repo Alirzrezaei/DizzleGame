@@ -1,0 +1,41 @@
+/*
+ * This application is a game project developed by Alireza Rezaei ITE102772
+ * The purpose is for Advanced Programming course.
+ */
+package logic;
+
+import static org.junit.Assert.assertEquals;
+import org.junit.Test;
+
+/**
+ *
+ * @author Alireza
+ */
+public class BoardTest {
+    
+    public BoardTest() {
+    }
+
+    @Test
+    public void testBoard_getBoardPoint_Bomb() {
+        IO io = new IO();
+        LevelReader obj = io.jsonParser(1);
+        
+        Board board = new Board(obj);
+        
+        assertEquals(2, board.getField()[7][2].getPoint());
+        assertEquals(ObjectTypes.bomb, board.getField()[7][2].getObject());
+    }
+    
+     @Test
+    public void testBoard_getBoardPoint_Jewel() {
+        IO io = new IO();
+        LevelReader obj = io.jsonParser(1);
+        
+        Board board = new Board(obj);
+        
+        assertEquals(3, board.getField()[8][1].getPoint());
+        assertEquals(ObjectTypes.jewelRed, board.getField()[8][1].getObject());
+    }
+
+}

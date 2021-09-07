@@ -1,0 +1,51 @@
+/*
+ * This application is a game project developed by Alireza Rezaei ITE102772
+ * The purpose is for Advanced Programming course.
+ */
+package logic;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+/**
+ *
+ * @author Rezaei
+ */
+public class IO {
+    
+    private final String path = "src/logic/levels/Level";
+    private final String ext = ".json";
+    
+    
+    protected LevelReader jsonParser(int level){
+        
+        
+        Gson gson = new Gson();
+        JsonArray jsonArray = null;
+        FileReader reader;
+        LevelReader levelObj = null;
+        try {
+            
+            reader = new FileReader(path+""+level+""+ext);
+            
+            //creating an object of level reader from json file
+            levelObj = gson.fromJson(reader, LevelReader.class);
+            for (int i = 0; i < levelObj.getField().length; i++) {
+                for (int j = 0; j < levelObj.getField()[i].length; j++) {
+                    System.out.print(", "+ levelObj.getField()[i][j]);
+                }
+                System.out.println("");
+            }
+
+            
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(IO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return levelObj;
+    }
+}

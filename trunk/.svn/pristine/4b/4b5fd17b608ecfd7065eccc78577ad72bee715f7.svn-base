@@ -1,0 +1,61 @@
+/*
+ * This application is a game project developed by Alireza Rezaei ITE102772
+ * The purpose is for Advanced Programming course.
+ */
+package logic;
+
+/**
+ *
+ * @author Rezaei
+ */
+public class Position {
+    private int x;
+    private int y;
+    
+    Position(int x, int y){
+        this.x = x;
+        this.y = y;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+    
+    protected boolean isNeighbor(Position pos){
+        
+        if(this.x + 1 == pos.getX() && this.y == pos.getY()){
+            return true;
+        }else if(this.x - 1 == pos.getX() && this.y == pos.getY()){
+            return true;
+        }else if(this.x == pos.getX() && this.y + 1 == pos.getY()){
+            return true;
+        }else if(this.x == pos.getX() && this.y - 1 == pos.getY()){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    
+    protected Position[] getNeighbors(Position pos){
+        Position [] neighbors = new Position[4];
+        
+        neighbors[0] = new Position(this.x + 1, this.y);
+        neighbors[1] = new Position(this.x - 1, this.y);
+        neighbors[2] = new Position(this.x, this.y + 1);
+        neighbors[3] = new Position(this.x, this.y - 1);
+        
+        return neighbors;
+    }
+}

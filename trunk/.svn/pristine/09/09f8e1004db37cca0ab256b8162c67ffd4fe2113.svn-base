@@ -1,0 +1,163 @@
+/*
+ * This application is a game project developed by Alireza Rezaei ITE102772
+ * The purpose is for Advanced Programming course.
+ */
+package logic;
+import com.google.gson.annotations.SerializedName;
+
+
+/**
+ *
+ * @author Alireza
+ */
+public class LevelReader {
+    private Integer field[][];
+    private boardObjects jewels[];
+    private boardObjects bombs;
+    private boardObjects puzzles[];
+    
+    @SerializedName("horizontal-lines")
+    private boardObjects[] horizontalLines;
+    
+    @SerializedName("vertical-lines")
+    private boardObjects[] verticalLines;
+    
+    private KeyObjects[] keys;
+    private Flag flag;
+    
+    private Position rocket;
+    private Position planet;
+
+    public Integer[][] getField() {
+        return field;
+    }
+
+    public boardObjects[] getJewels() {
+        return jewels;
+    }
+
+    public boardObjects getBombs() {
+        return bombs;
+    }
+
+    public boardObjects[] getPuzzles() {
+        return puzzles;
+    }
+
+    public boardObjects[] getHorizontalLines() {
+        return horizontalLines;
+    }
+
+    public boardObjects[] getVerticalLines() {
+        return verticalLines;
+    }
+
+    public KeyObjects[] getKeys() {
+        return keys;
+    }
+
+    public Flag getFlag() {
+        return flag;
+    }
+
+    public Position getRocket() {
+        return rocket;
+    }
+
+    public Position getPlanet() {
+        return planet;
+    }
+
+    public void setField(Integer[][] field) {
+        this.field = field;
+    }
+
+    public void setJewels(boardObjects[] jewels) {
+        this.jewels = jewels;
+    }
+
+    public void setBombs(boardObjects bombs) {
+        this.bombs = bombs;
+    }
+
+    public void setPuzzles(boardObjects[] puzzles) {
+        this.puzzles = puzzles;
+    }
+
+    public void setHorizontalLines(boardObjects[] horizontalLines) {
+        this.horizontalLines = horizontalLines;
+    }
+
+    public void setVerticalLines(boardObjects[] verticalLines) {
+        this.verticalLines = verticalLines;
+    }
+
+    public void setKeys(KeyObjects[] keys) {
+        this.keys = keys;
+    }
+
+    public void setFlag(Flag flag) {
+        this.flag = flag;
+    }
+
+    public void setRocket(Position rocket) {
+        this.rocket = rocket;
+    }
+
+    public void setPlanet(Position planet) {
+        this.planet = planet;
+    }
+    
+    
+    
+
+    public static class KeyObjects {
+        private Position position;
+        private Position[] holes;
+
+        public Position getPosition() {
+            return position;
+        }
+
+        public Position[] getHoles() {
+            return holes;
+        }
+
+        public void setPosition(Position position) {
+            this.position = position;
+        }
+
+        public void setHoles(Position[] holes) {
+            this.holes = holes;
+        }   
+    }
+
+    public static class Flag {
+
+       private int [] points;
+       private Position position;
+
+        public int[] getPoints() {
+            return points;
+        }
+
+        public Position getPosition() {
+            return position;
+        }
+
+        public void setPoints(int[] points) {
+            this.points = points;
+        }
+
+        public void setPosition(Position position) {
+            this.position = position;
+        }
+       
+       
+    }
+    
+    
+    
+    
+  
+}

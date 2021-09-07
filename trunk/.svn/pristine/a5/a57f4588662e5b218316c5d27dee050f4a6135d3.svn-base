@@ -1,0 +1,16 @@
+/*
+ * This application is a game project developed by Alireza Rezaei ITE102772
+ * The purpose is for Advanced Programming course.
+ */
+package logic;
+
+/**
+ *
+ * @author Alireza
+ */
+public enum ObjectTypes {
+    bomb, flagBlue, jewelBlue, jewelRed, jewelYellow, keyBlue, keyYellow, 
+    keyholeBlue, keyholeYellow, planet, puzzleBlue, puzzleGreen, rocket;
+    
+    
+}

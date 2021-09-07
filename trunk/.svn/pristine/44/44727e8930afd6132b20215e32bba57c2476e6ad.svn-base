@@ -1,0 +1,179 @@
+/*
+ * This application is a game project developed by Alireza Rezaei ITE102772
+ * The purpose is for Advanced Programming course.
+ */
+package logic;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.stage.FileChooser;
+
+/**
+ * IO class is to read and write from input file or output file. The type of file that this 
+ * class is dealing with is json file for save, load and parsing of level files; and txt file with 
+ * .log extension to log the actions of all players. The jsonParser method is to parse the json file
+ * of the given level and it store the information into LevelReader class object that can be used to loaded informations 
+ * on the player's boards.
+ * The load method is for loading the game from a save game and SaveLoadObject class object is used to stor the 
+ * data in it,and the save method is to save the current game. 
+ * 
+ * The logger method is to show the each players action on main window and also log it into a file to be checked later for errors. 
+ * @author Rezaei
+ */
+public class IO {
+    
+    private final String path = "src/logic/levels/Level";
+    private final String ext = ".json";
+    private Game game;
+    
+    
+    protected LevelReader jsonParser(int level){
+        
+        
+        Gson gson = new Gson();
+        JsonArray jsonArray = null;
+        FileReader reader;
+        LevelReader levelObj = null;
+        try {
+            
+            reader = new FileReader(path+""+level+""+ext);
+            
+            //creating an object of level reader from json file
+            levelObj = gson.fromJson(reader, LevelReader.class);
+            for (int i = 0; i < levelObj.getField().length; i++) {
+                for (int j = 0; j < levelObj.getField()[i].length; j++) {
+                    System.out.print(", "+ levelObj.getField()[i][j]);
+                }
+                System.out.println("");
+            }
+
+            
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(IO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return levelObj;
+    }
+    protected Game load(GUIConnector gui, Game game) throws FileNotFoundException{
+        this.game = game;
+        FileChooser chooser = new FileChooser();
+        chooser.setInitialDirectory(new File(System.getProperty("user.dir")));
+        chooser.setTitle("Choose location To Save Report");
+        File selectedFile = null;
+        if (selectedFile == null) {
+            selectedFile = chooser.showOpenDialog(null);
+        }
+
+        Gson gson = new Gson();
+        //JSONArray jsonArray = null;
+     
+        FileReader reader = new FileReader(selectedFile.getPath());
+
+        SaveLoadObject load = gson.fromJson(reader, SaveLoadObject.class);
+        
+        System.out.println("load " + load.getLevelNo());
+        
+        this.game = new Game(gui, load);
+        
+        return this.game;
+    
+        
+    }
+    protected void save(int round, int levelNo, int turnOf, int[] dice, int flagReachedAs, Player[] players){
+        
+        Gson gson = new Gson();
+        SaveLoadObject saveObject = new SaveLoadObject();
+        
+        saveObject.setDice(dice);
+        saveObject.setLevelNo(levelNo);
+        saveObject.setRound(round);
+        saveObject.setTurnOf(turnOf);
+        
+        SaveLoadPlayer[] savePlayer = new SaveLoadPlayer[players.length];
+        
+        for(int i = 0; i < players.length; i++){
+            savePlayer[i] = new SaveLoadPlayer();
+            savePlayer[i].setActive(!players[i].isDropOut());
+            savePlayer[i].setFlagReachedAs(players[i].getFlagReachedAs());
+            
+            Position[] temp= new Position[players[i].getBoard().getAllCrossed().size()];
+            players[i].getBoard().getAllCrossed().toArray(temp);
+            
+            savePlayer[i].setChecked(temp);
+            
+            temp= new Position[players[i].getBoard().getAllOccupied().size()];
+            players[i].getBoard().getAllOccupied().toArray(temp);
+            
+            savePlayer[i].setDiceOn(temp);
+            
+            temp= new Position[players[i].getBoard().getAllExploded().size()];
+            players[i].getBoard().getAllExploded().toArray(temp);
+            
+            savePlayer[i].setExploded(temp);
+            
+        }
+        
+        saveObject.setPlayers(savePlayer);
+        
+        jsonToFile(saveObject);
+        
+    }
+    private void jsonToFile(SaveLoadObject obj) {
+        assert (obj != null);
+
+        FileChooser chooser = new FileChooser();
+        chooser.setInitialDirectory(new File(System.getProperty("user.dir")));
+        chooser.setTitle("Choose location To Save the Game");
+        File selectedFile = null;
+        if (selectedFile == null) {
+            chooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter(".json", ".json"),
+                    new FileChooser.ExtensionFilter(".txt", ".txt"));
+            selectedFile = chooser.showSaveDialog(null);
+        }
+        if (selectedFile != null) {
+
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+            try (FileWriter writer = new FileWriter(selectedFile.getPath())) {
+                gson.toJson(obj, writer);
+                writer.flush();
+            } catch (IOException e) {
+            }
+        }
+    }
+    public void logger(int player, int dice, Position pos, ObjectTypes type, boolean dropOut){
+        String s = "";
+        if(dropOut){
+            if(player == 0){
+                s = s+ "Human player is dropped out.";
+            }else{
+                s = s + "C" +player+" is dropped out.";
+            }
+        }else{
+            if(player == 0){
+                s = s+ "Human put dice " + dice + " at ["+pos+"], ";
+            }else{
+                
+                s = s + "C" +player+" put dice " + dice + " at ["+pos+"], ";
+            }
+            if(type != ObjectTypes.noType){
+            if(type == ObjectTypes.bomb){
+                s = s + type + " is ignited.";
+            }else{
+                s = s +type+ " is collected.";
+            }
+            }
+        }
+        System.out.println("" + s);
+    }
+
+}

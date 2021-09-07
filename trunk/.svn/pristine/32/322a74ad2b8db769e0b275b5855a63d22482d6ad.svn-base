@@ -1,0 +1,17 @@
+/*
+ * This application is a game project developed by Alireza Rezaei ITE102772
+ * The purpose is for Advanced Programming course.
+ */
+package logic;
+
+/**
+ *
+ * @author Alireza
+ */
+public class Human extends Player{
+    
+    public Human(Board board, boolean isBot) {
+        super(board, isBot);
+    }
+    
+}

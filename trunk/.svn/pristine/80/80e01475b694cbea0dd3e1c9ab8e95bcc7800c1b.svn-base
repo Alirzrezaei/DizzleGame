@@ -1,0 +1,54 @@
+/*
+ * This application is a game project developed by Alireza Rezaei ITE102772
+ * The purpose is for Advanced Programming course.
+ */
+package logic;
+
+import java.util.List;
+
+/**
+ *
+ * @author Rezaei
+ */
+public class Bot extends Player {
+
+    public Bot(Board board, boolean isBot) {
+        super(board, isBot);
+    }
+    
+    protected void ai(int level, List<Integer> dices) {
+        Position pos = null;
+        List<Position> neighbors = this.getBoard().highlightList(dices);
+        
+        for (int i = 0; i < this.getBoard().getField().length; i++) {
+            for (int j = 0; j < this.getBoard().getField()[i].length; j++) {
+                if(this.getBoard().getField()[i][j] != null && !this.getBoard().getField()[i][j].isCrossed() 
+                        && !this.getBoard().getField()[i][j].isOccupied() && !this.getBoard().getField()[i][j].isExploded()){
+                    Position temp = new Position(i, j);
+                    if(this.getBoard().contiain(neighbors, pos)){
+                        if(pos == null){
+                            pos = temp;
+                        }else{
+                            posCompare(pos, temp);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    private Position posCompare(Position pos, Position temp){
+        ObjectTypes type = null;
+        
+        if(this.getBoard().getField()[temp.getX()][temp.getY()].getObject().getPriority() < 
+               this.getBoard().getField()[pos.getX()][pos.getY()].getObject().getPriority()){
+            pos = temp;
+        }else{
+            if(this.getBoard().getField()[pos.getX()][pos.getY()].getObject() == ObjectTypes.noType){
+                
+            }
+        }
+        
+        return pos;
+    }
+}

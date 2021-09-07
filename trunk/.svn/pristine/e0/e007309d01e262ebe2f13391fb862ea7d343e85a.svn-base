@@ -1,0 +1,32 @@
+/*
+ * This application is a game project developed by Alireza Rezaei ITE102772
+ * The purpose is for Advanced Programming course.
+ */
+package logic;
+
+/**
+ *
+ * @author Rezaei
+ */
+public class Board {
+    LevelReader board;
+    
+    Board(LevelReader board){
+        this.board = board;
+    }
+    
+    protected LevelReader getBoard(){
+        return this.board;
+    }
+    
+    protected boolean isValidPos(Position pos){
+        return isValidX(pos.getX()) && isValidY(pos.getY()) && this.board.getField()[pos.getX()][pos.getY()] != null;
+    }   
+    private boolean isValidX(int x){
+        return x >= this.board.getField().length && x < this.board.getField().length;
+    }
+    private boolean isValidY(int y){
+        return y >= this.board.getField()[0].length && y < this.board.getField()[0].length;
+    }
+    
+}

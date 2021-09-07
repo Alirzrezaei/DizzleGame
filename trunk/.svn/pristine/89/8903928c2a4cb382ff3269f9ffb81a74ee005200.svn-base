@@ -1,0 +1,71 @@
+/*
+ * This application is a game project developed by Alireza Rezaei ITE102772
+ * The purpose is for Advanced Programming course.
+ */
+package logic;
+
+/**
+ *
+ * @author Rezaei
+ */
+public class Cell {
+    
+    private boolean crossed; 
+    private boolean occupied;
+    private Integer value;
+    private ObjectTypes object;
+    private int point;
+    /**
+     * the main constructor to make a cell object for the board with given parameters
+     * @param value the value of the cell 1 to 6 and 0 if it is crossed
+     * @param crossed cell is crossed at the beginning of game if its value is 0
+     * @param object type of object which is stored on the game
+     * @param point point of the object
+     */
+     Cell(Integer value, boolean crossed, ObjectTypes object, int point){
+        this.value = value;
+        this.crossed = crossed;
+        this.object = object;
+        this.point = point;
+    }
+
+    public void setPoint(int point) {
+        this.point = point;
+    }
+
+    public int getPoint() {
+        return point;
+    }
+     
+    public ObjectTypes getObject() {
+        return object;
+    }
+
+    public void setObject(ObjectTypes object) {
+        this.object = object;
+    }
+    public void setCrossed(boolean crossed) {
+        this.crossed = crossed;
+    }
+
+    public void setOccupied(boolean occupied) {
+        this.occupied = occupied;
+    }
+
+    public void setValue(Integer value) {
+        this.value = value;
+    }
+
+    public boolean isCrossed() {
+        return crossed;
+    }
+
+    public boolean isOccupied() {
+        return occupied;
+    }
+
+    public Integer getValue() {
+        return value;
+    }
+    
+}

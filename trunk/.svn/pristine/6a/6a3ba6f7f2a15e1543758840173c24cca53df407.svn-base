@@ -1,0 +1,203 @@
+/*
+ * This application is a game project developed by Alireza Rezaei ITE102772
+ * The purpose is for Advanced Programming course.
+ */
+package logic;
+
+/**
+ *
+ * @author Rezaei
+ */
+public class Board {
+
+    LevelReader board;
+    private Cell[][] field;
+
+    Board(LevelReader board) {
+        this.board = board;
+        field = new Cell[board.getField().length][board.getField()[0].length];
+        setToField(board);
+    }
+
+    public Cell[][] getField() {
+        return field;
+    }
+
+    protected LevelReader getBoard() {
+        return this.board;
+    }
+
+    private void setToField(LevelReader board) {
+
+        for (int i = 0; i < board.getField().length; i++) {
+            for (int j = 0; j < board.getField()[i].length; j++) {
+                boolean isCross = false;
+
+                if (board.getField()[i][j] != null && board.getField()[i][j] == 0) {
+                    isCross = true;
+                } else {
+                    if (board.getField()[i][j] != null) {
+                        Position pos = new Position(i, j);
+                        ObjectTypes type = isObject(board, pos);
+                    }
+                }
+
+            }
+        }
+    }
+
+    private ObjectTypes isObject(LevelReader board, Position pos) {
+        ObjectTypes type = ObjectTypes.noType;
+
+        type = isJewel(board, pos);
+        if(type == ObjectTypes.noType){
+            type = isBomb(board, pos);
+        }
+        if(type == ObjectTypes.noType){
+            type = isPuzzle(board, pos);
+        }
+        if(type == ObjectTypes.noType){
+            type = isFlag(board, pos);
+        }
+        if(type == ObjectTypes.noType){
+            type = isKey(board, pos);
+        }
+        if(type == ObjectTypes.noType){
+            type = isKeyhole(board, pos);
+        }
+        if(type == ObjectTypes.noType){
+            type = isRocket(board, pos);
+        }
+        if(type == ObjectTypes.noType){
+            type = isPlanet(board, pos);
+        }
+        return type;
+    }
+
+    private ObjectTypes isJewel(LevelReader board, Position pos) {
+        ObjectTypes type = ObjectTypes.noType;
+        for (int i = 0; i < board.getJewels().length && type == ObjectTypes.noType; i++) {
+            for (int j = 0; j < board.getJewels()[i].getPositions().length && type == ObjectTypes.noType; j++) {
+                if (board.getJewels()[i].getPositions()[j].equals(pos)) {
+                    if (board.getJewels()[i].getPoints() == 1) {
+                        type = ObjectTypes.jewelBlue;
+                    } else if (board.getJewels()[i].getPoints() == 2) {
+                        type = ObjectTypes.jewelYellow;
+                    } else {
+                        type = ObjectTypes.jewelRed;
+                    }
+                }
+            }
+        }
+        return type;
+    }
+
+    private ObjectTypes isBomb(LevelReader board, Position pos) {
+        ObjectTypes type = ObjectTypes.noType;
+        for (int i = 0; i < board.getBombs().getPositions().length && type == ObjectTypes.noType; i++) {
+            if (board.getBombs().getPositions()[i].equals(pos)) {
+                type = ObjectTypes.bomb;
+            }
+        }
+        return type;
+    }
+
+    private ObjectTypes isPuzzle(LevelReader board, Position pos) {
+        ObjectTypes type = ObjectTypes.noType;
+        for (int i = 0; i < board.getPuzzles().length && type == ObjectTypes.noType; i++) {
+            for (int j = 0; j < board.getPuzzles()[i].getPositions().length && type == ObjectTypes.noType; j++) {
+                if (board.getPuzzles()[i].getPositions()[j].equals(pos)) {
+                    if (board.getPuzzles().length == 1) {
+                        type = ObjectTypes.puzzleBlue;
+                    } else {
+                        if (i == 0) {
+                            type = ObjectTypes.puzzleGreen;
+                        } else {
+                            type = ObjectTypes.puzzleBlue;
+                        }
+                    }
+                }
+            }
+        }
+        return type;
+    }
+
+    private ObjectTypes isKey(LevelReader board, Position pos) {
+        ObjectTypes type = ObjectTypes.noType;
+        for (int i = 0; i < board.getKeys().length && type == ObjectTypes.noType; i++) {
+            if (board.getKeys()[i].getPosition().equals(pos)) {
+                if (i == 0) {
+                    type = ObjectTypes.keyYellow;
+                } else {
+                    type = ObjectTypes.keyBlue;
+                }
+            }
+        }
+        return type;
+    }
+
+    private ObjectTypes isKeyhole(LevelReader board, Position pos) {
+        ObjectTypes type = ObjectTypes.noType;
+        for (int i = 0; i < board.getKeys().length && type == ObjectTypes.noType; i++) {
+            for (int j = 0; j < board.getKeys()[i].getHoles().length; j++) {
+                if (board.getKeys()[i].getHoles()[j].equals(pos)) {
+                    if (i == 0) {
+                        type = ObjectTypes.keyholeYellow;
+                    } else {
+                        type = ObjectTypes.keyholeBlue;
+                    }
+                }
+            }
+        }
+        return type;
+    }
+
+    private ObjectTypes isFlag(LevelReader board, Position pos) {
+        assert (board.getFlag() != null);
+
+        ObjectTypes type = ObjectTypes.noType;
+
+        if (board.getFlag().getPosition().equals(pos)) {
+            type = ObjectTypes.flagBlue;
+        }
+
+        return type;
+    }
+
+    private ObjectTypes isRocket(LevelReader board, Position pos) {
+        assert (board.getRocket() != null);
+
+        ObjectTypes type = ObjectTypes.noType;
+
+        if (board.getRocket().equals(pos)) {
+            type = ObjectTypes.rocket;
+        }
+
+        return type;
+    }
+
+    private ObjectTypes isPlanet(LevelReader board, Position pos) {
+        assert (board.getRocket() != null);
+
+        ObjectTypes type = ObjectTypes.noType;
+
+        if (board.getPlanet().equals(pos)) {
+            type = ObjectTypes.planet;
+        }
+
+        return type;
+    }
+
+    protected boolean isValidPos(Position pos) {
+        return isValidX(pos.getX()) && isValidY(pos.getY()) && this.board.getField()[pos.getX()][pos.getY()] != null;
+    }
+
+    private boolean isValidX(int x) {
+        return x >= this.board.getField().length && x < this.board.getField().length;
+    }
+
+    private boolean isValidY(int y) {
+        return y >= this.board.getField()[0].length && y < this.board.getField()[0].length;
+    }
+
+}

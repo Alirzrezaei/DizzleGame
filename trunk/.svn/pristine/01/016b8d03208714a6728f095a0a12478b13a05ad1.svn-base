@@ -1,0 +1,23 @@
+/*
+ * This application is a game project developed by Alireza Rezaei ITE102772
+ * The purpose is for Advanced Programming course.
+ */
+package logic;
+
+/**
+ *
+ * @author Rezaei
+ */
+public enum Dice {
+    one(1), two(2), three(3), four(4), five(5), six(6);
+    
+    int value;
+    
+    Dice(int value){
+        this.value = value;
+    }
+    
+    public int getValue(){
+        return this.value;
+    }
+}

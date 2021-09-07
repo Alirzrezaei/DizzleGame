@@ -1,0 +1,48 @@
+/*
+ * This application is a game project developed by Alireza Rezaei ITE102772
+ * The purpose is for Advanced Programming course.
+ */
+package logic;
+
+/**
+ *
+ * @author Rezaei
+ */
+public class BotChoose {
+    private ObjectTypes type;
+    private int point;
+    private Position pos;
+
+    public BotChoose(Position pos, int point, ObjectTypes type) {
+        
+        this.pos = pos;
+        this.point = point;
+        this.type = type;
+    }
+
+    public ObjectTypes getType() {
+        return type;
+    }
+
+    public int getPoint() {
+        return point;
+    }
+
+    public Position getPos() {
+        return pos;
+    }
+
+    public void setType(ObjectTypes type) {
+        this.type = type;
+    }
+
+    public void setPoint(int point) {
+        this.point = point;
+    }
+
+    public void setPos(Position pos) {
+        this.pos = pos;
+    }
+    
+    
+}

@@ -1,0 +1,25 @@
+/*
+ * This application is a game project developed by Alireza Rezaei ITE102772
+ * The purpose is for Advanced Programming course.
+ */
+package logic;
+
+/**
+ *
+ * @author Alireza
+ */
+public enum ObjectTypes {
+    bomb(4), flag(1), jewel(2),  key(5), 
+    keyhole(6),  planet(9), puzzle(0), rocket(3), 
+    noType(8), horizontalLine(7), verticalLine(7);
+    
+    private int priority;
+
+     ObjectTypes(int priority) {
+        this.priority = priority;
+    }
+    
+     protected int getPriority(){
+         return this.priority;
+     }
+}

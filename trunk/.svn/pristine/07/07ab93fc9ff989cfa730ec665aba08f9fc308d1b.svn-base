@@ -1,0 +1,50 @@
+/*
+ * This application is a game project developed by Alireza Rezaei ITE102772
+ * The purpose is for Advanced Programming course.
+ */
+package logic;
+
+/**
+ *
+ * @author Rezaei
+ */
+public class Board {
+    LevelReader board;
+    private Cell field;
+
+   
+    
+    Board(LevelReader board){
+        this.board = board;
+        setToField(board);
+    }
+     public Cell getField() {
+        return field;
+    }
+    protected LevelReader getBoard(){
+        return this.board;
+    }
+    private void setToField(LevelReader board){
+        for (int i = 0; i < board.getField().length; i++) {
+            for (int j = 0; j < board.getField()[i].length; j++) {
+                Position pos = new Position(i, j);
+            }
+        }
+    }
+    private int isObject(LevelReader board, Position pos){
+        return 0;
+    }
+    private int isJewel(LevelReader board, Position pos){
+        return 0;
+    }
+    protected boolean isValidPos(Position pos){
+        return isValidX(pos.getX()) && isValidY(pos.getY()) && this.board.getField()[pos.getX()][pos.getY()] != null;
+    }   
+    private boolean isValidX(int x){
+        return x >= this.board.getField().length && x < this.board.getField().length;
+    }
+    private boolean isValidY(int y){
+        return y >= this.board.getField()[0].length && y < this.board.getField()[0].length;
+    }
+    
+}

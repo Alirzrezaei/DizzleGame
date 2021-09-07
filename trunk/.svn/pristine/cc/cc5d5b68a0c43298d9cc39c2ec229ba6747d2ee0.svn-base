@@ -1,0 +1,59 @@
+/*
+ * This application is a game project developed by Alireza Rezaei ITE102772
+ * The purpose is for Advanced Programming course.
+ */
+package logic;
+
+/**
+ *
+ * @author Alireza
+ */
+public class SaveLoadPlayer {
+    private boolean active;
+    private Position [] checked;
+    private Position [] diceOn;
+    private Position [] exploded;
+    private int flagReachedAs;
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public Position[] getChecked() {
+        return checked;
+    }
+
+    public Position[] getDiceOn() {
+        return diceOn;
+    }
+
+    public Position[] getExploded() {
+        return exploded;
+    }
+
+    public int getFlagReachedAs() {
+        return flagReachedAs;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public void setChecked(Position[] checked) {
+        this.checked = checked;
+    }
+
+    public void setDiceOn(Position[] diceOn) {
+        this.diceOn = diceOn;
+    }
+
+    public void setExploded(Position[] exploded) {
+        this.exploded = exploded;
+    }
+
+    public void setFlagReachedAs(int flagReachedAs) {
+        this.flagReachedAs = flagReachedAs;
+    }
+    
+    
+}

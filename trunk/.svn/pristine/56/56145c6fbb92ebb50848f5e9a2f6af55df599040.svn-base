@@ -1,0 +1,15 @@
+/*
+ * This application is a game project developed by Alireza Rezaei ITE102772
+ * The purpose is for Advanced Programming course.
+ */
+package gui;
+
+import logic.GUIConnector;
+
+/**
+ *
+ * @author Alireza
+ */
+public class JavaFXGUI implements GUIConnector{
+    
+}

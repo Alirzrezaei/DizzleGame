@@ -1,0 +1,47 @@
+/*
+ * This application is a game project developed by Alireza Rezaei ITE102772
+ * The purpose is for Advanced Programming course.
+ */
+package logic;
+
+/**
+ *
+ * @author Rezaei
+ */
+public class Cell {
+    
+    private boolean crossed; 
+    private boolean occupied;
+    private Integer value;
+    
+    private boardObjects obj;
+    
+    Cell(Integer value){
+        this.value = value;
+    }
+
+    public void setCrossed(boolean crossed) {
+        this.crossed = crossed;
+    }
+
+    public void setOccupied(boolean occupied) {
+        this.occupied = occupied;
+    }
+
+    public void setValue(Integer value) {
+        this.value = value;
+    }
+
+    public boolean isCrossed() {
+        return crossed;
+    }
+
+    public boolean isOccupied() {
+        return occupied;
+    }
+
+    public Integer getValue() {
+        return value;
+    }
+    
+}

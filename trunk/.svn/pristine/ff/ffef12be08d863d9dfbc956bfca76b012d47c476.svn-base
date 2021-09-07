@@ -1,0 +1,16 @@
+/*
+ * This application is a game project developed by Alireza Rezaei ITE102772
+ * The purpose is for Advanced Programming course.
+ */
+package logic;
+
+import java.util.List;
+
+/**
+ *
+ * @author Alireza
+ */
+public interface GUIConnector {
+    public void addImgsToAllGridPanes(LevelReader levelObj, int player);
+    public void setDicesOnGridPane(List<Integer> list);
+}

@@ -1,0 +1,176 @@
+/*
+ * This application is a game project developed by Alireza Rezaei ITE102772
+ * The purpose is for Advanced Programming course.
+ */
+package logic;
+
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
+
+/**
+ *
+ * @author Rezaei
+ */
+public class Game {
+
+    private Player players[];
+    private GUIConnector gui;
+    private int level;
+    private int round;
+    private int turn;
+    private int subTurn;
+    private int idxCurrent;
+    private IO io;
+    private List<Integer> dices;
+
+    public Game(GUIConnector gui, int level, int noOfPlayers) {
+        this.gui = gui;
+        this.io = new IO();
+        this.level = level;
+
+        round = 0;
+        turn = 0;
+        idxCurrent = 0;
+
+        this.players = new Player[noOfPlayers];
+        this.dices = new LinkedList<>();
+
+        System.out.println("level and players are: " + level + ", " + noOfPlayers);
+        LevelReader levelObj = io.jsonParser(level);
+
+        for (int i = 0; i < players.length; i++) {
+            if (i == 0) {
+                players[i] = new Human(new Board(levelObj), false);
+            } else {
+                players[i] = new Bot(new Board(levelObj), true);
+            }
+        }
+
+        fillDices(noOfPlayers);
+        this.gui.addImgsToAllGridPanes(levelObj, noOfPlayers, level);
+
+    }
+
+    public Player[] getPlayers() {
+        return players;
+    }
+
+    public GUIConnector getGui() {
+        return gui;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public int getRound() {
+        return round;
+    }
+
+    public int getTurn() {
+        return turn;
+    }
+
+    public int getSubTurn() {
+        return subTurn;
+    }
+
+    public int getIdxCurrent() {
+        return idxCurrent;
+    }
+
+    public IO getIo() {
+        return io;
+    }
+
+    public List<Integer> getDices() {
+        return dices;
+    }
+
+    private void fillDices(int noOfPlayer) {
+        Random rand = new Random();
+
+        for (int i = 0; i < (noOfPlayer * 3 + 1); i++) {
+            dices.add((int) (Math.random() * ((6 - 1) + 1)) + 1);
+        }
+        Collections.sort(dices);
+        this.gui.setDicesOnGridPane(dices);
+    }
+
+    void nextPlayer() {
+
+        if (!endGame()) {
+            if (subTurn == players.length - 1) {
+                if (turn == players.length - 1) {
+                    round++;
+                    turn = 0;
+                    subTurn = 0;
+                    idxCurrent = 0;
+                } else {
+                    turn++;
+                    subTurn = 0;
+                    idxCurrent = turn;
+                }
+            } else {
+                subTurn++;
+                idxCurrent = (idxCurrent + 1) % players.length;
+            }
+
+            if (players[idxCurrent].isBot()) {
+                //botTurn();
+            }
+
+        }
+    }
+    public void setDiceToBoard(Position Pos){
+        nextPlayer();
+    }
+    private void rollAgainDices() {
+        Random rand = new Random();
+        int len = dices.size();
+        dices.clear();
+        for (int i = 0; i < len; i++) {
+            dices.add((int) (Math.random() * ((6 - 1) + 1)) + 1);
+        }
+        Collections.sort(dices);
+        gui.setDicesOnGridPane(dices);
+
+    }
+
+    public void rollAgainClicked() {
+        this.gui.setBtnDisable(true);
+        rollAgainDices();
+    }
+
+    public void DropOutClicked() {
+        this.gui.setBtnDisable(true);
+    }
+    
+    public boolean canPlay() {
+        boolean canPlay = true;
+
+        if (true) {
+
+        }
+
+        return canPlay;
+    }
+    /**
+     * if the current player is bot this player is called
+     */
+    private void botTurn() {
+        nextPlayer();
+    }
+    /**
+     * this method is checking if the game is finished. 
+     * the game will be finished when the current players board is full or
+     * all rounds are played completely. 
+     * @return true if current player's board is full or round are finished
+     */
+    boolean endGame() {
+        return false;
+    }
+
+}

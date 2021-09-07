@@ -1,0 +1,117 @@
+{
+  "levelNo": 1,
+  "round": 0,
+  "turnOf": 0,
+  "dice": [
+    1,
+    1,
+    1,
+    4
+  ],
+  "players": [
+    {
+      "active": true,
+      "checked": [
+        {
+          "x": 4,
+          "y": 3
+        },
+        {
+          "x": 4,
+          "y": 4
+        }
+      ],
+      "diceOn": [
+        {
+          "x": 4,
+          "y": 5
+        },
+        {
+          "x": 4,
+          "y": 6
+        },
+        {
+          "x": 5,
+          "y": 6
+        }
+      ],
+      "exploded": [],
+      "flagReachedAs": 0
+    },
+    {
+      "active": true,
+      "checked": [
+        {
+          "x": 4,
+          "y": 3
+        },
+        {
+          "x": 4,
+          "y": 4
+        }
+      ],
+      "diceOn": [
+        {
+          "x": 2,
+          "y": 2
+        },
+        {
+          "x": 2,
+          "y": 3
+        },
+        {
+          "x": 3,
+          "y": 3
+        }
+      ],
+      "exploded": [],
+      "flagReachedAs": 0
+    },
+    {
+      "active": false,
+      "checked": [
+        {
+          "x": 4,
+          "y": 3
+        },
+        {
+          "x": 4,
+          "y": 4
+        }
+      ],
+      "diceOn": [
+        {
+          "x": 3,
+          "y": 3
+        }
+      ],
+      "exploded": [],
+      "flagReachedAs": 0
+    },
+    {
+      "active": false,
+      "checked": [
+        {
+          "x": 4,
+          "y": 3
+        },
+        {
+          "x": 4,
+          "y": 4
+        }
+      ],
+      "diceOn": [
+        {
+          "x": 3,
+          "y": 4
+        },
+        {
+          "x": 3,
+          "y": 5
+        }
+      ],
+      "exploded": [],
+      "flagReachedAs": 0
+    }
+  ]
+}

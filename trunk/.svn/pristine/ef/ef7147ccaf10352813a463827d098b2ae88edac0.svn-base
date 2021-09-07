@@ -1,0 +1,26 @@
+/*
+ * This application is a game project developed by Alireza Rezaei ITE102772
+ * The purpose is for Advanced Programming course.
+ */
+package logic;
+
+import java.util.HashMap;
+import java.util.List;
+
+/**
+ *
+ * @author Alireza
+ */
+public interface GUIConnector {
+    public void addImgsToAllGridPanes(LevelReader levelObj, int player, int level);
+    public void setDicesOnGridPane(List<Integer> list);
+    public void setBtnDisable(boolean value);
+    public void setDiceToBoard(int dice, Position pos, int player);
+    public void removeHighlightPos(Position pos);
+    public void highlightPos(Position pos);
+    public void showPenOnBoard(int player);
+    public void removePenFromBoard(int player);
+    public void clear();
+    public void initPointTable(HashMap<logic.ObjectTypes, Integer> points);
+    public void updateScores(logic.ObjectTypes type, int point, int idx);
+}

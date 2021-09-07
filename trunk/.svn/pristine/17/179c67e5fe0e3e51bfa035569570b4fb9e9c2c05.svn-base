@@ -1,0 +1,60 @@
+/*
+ * This application is a game project developed by Alireza Rezaei ITE102772
+ * The purpose is for Advanced Programming course.
+ */
+package logic;
+
+/**
+ *
+ * @author Alireza
+ */
+public class SaveLoadObject {
+    
+    private int levelNo;
+    private int round;
+    private int turnOf;
+    private int [] dice;
+    private SaveLoadPlayer [] players;
+
+    public int getLevelNo() {
+        return levelNo;
+    }
+
+    public int getRound() {
+        return round;
+    }
+
+    public int getTurnOf() {
+        return turnOf;
+    }
+
+    public int[] getDice() {
+        return dice;
+    }
+
+    public void setLevelNo(int levelNo) {
+        this.levelNo = levelNo;
+    }
+
+    public void setRound(int round) {
+        this.round = round;
+    }
+
+    public void setTurnOf(int turnOf) {
+        this.turnOf = turnOf;
+    }
+
+    public void setDice(int[] dice) {
+        this.dice = dice;
+    }
+
+    public void setPlayers(SaveLoadPlayer[] players) {
+        this.players = players;
+    }
+
+    public SaveLoadPlayer[] getPlayers() {
+        return players;
+    }
+    
+    
+}

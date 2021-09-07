@@ -1,0 +1,72 @@
+/*
+ * This application is a game project developed by Alireza Rezaei ITE102772
+ * The purpose is for Advanced Programming course.
+ */
+package logic;
+
+import java.util.HashMap;
+import java.util.List;
+
+/**
+ *
+ * @author Alireza
+ */
+public class FakeGUI implements GUIConnector{
+
+    @Override
+    public void addImgsToAllGridPanes(LevelReader levelObj, int player, int level) {
+    }
+
+    @Override
+    public void setDicesOnGridPane(List<Integer> list) {
+    }
+
+    @Override
+    public void setBtnDisable(boolean value) {
+    }
+    @Override
+        public void setDiceToBoard(int dice, Position pos, int player){
+            
+        }
+    @Override
+    public void removeHighlightPos(Position pos){
+    
+}
+    @Override
+    public void highlightPos(Position pos){
+
+}
+
+    @Override
+    public void showPenOnBoard(int idPlayer) {
+        
+    }
+
+    @Override
+    public void removePenFromBoard(int player) {
+       
+    }
+
+    @Override
+    public void clear() {
+        
+    }
+
+    @Override
+    public void initPointTable(int level) {
+    }
+
+    @Override
+    public void updateScores(ObjectTypes type, int point, int idx) {
+    }
+
+    @Override
+    public void setCrossedPos(Position pos, int player) {
+
+    }
+
+    @Override
+    public void removeDiceFromBoard(Position pos, int player) {
+      
+    }
+}

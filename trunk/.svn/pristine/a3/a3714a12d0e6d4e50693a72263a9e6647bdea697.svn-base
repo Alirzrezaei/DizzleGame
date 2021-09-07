@@ -1,0 +1,21 @@
+/*
+ * This application is a game project developed by Alireza Rezaei ITE102772
+ * The purpose is for Advanced Programming course.
+ */
+package logic;
+
+/**
+ *
+ * @author Rezaei
+ */
+public class Player {
+    private boolean isBot;
+    private boolean isDropedOut;
+    private Board board;
+    
+    private Position[] playingPositions;
+    
+    Player(Board board, boolean isBot){
+         
+    }
+}

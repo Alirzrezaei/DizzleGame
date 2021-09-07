@@ -1,0 +1,423 @@
+/*
+ * This application is a game project developed by Alireza Rezaei ITE102772
+ * The purpose is for Advanced Programming course.
+ */
+package logic;
+
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
+
+/**
+ *
+ * @author Rezaei
+ */
+public class Game {
+
+    private Player players[];
+    private GUIConnector gui;
+    private int level;
+    private int round;
+    private int turn;
+    private int subTurn;
+    private int idxCurrent;
+    private IO io;
+    private List<Integer> dices;
+    private List<Position> highlight;
+    private boolean rolledAgain;
+
+    public Game(GUIConnector gui, int level, int noOfPlayers) {
+        this.gui = gui;
+        this.io = new IO();
+        this.level = level;
+
+        round = 0;
+        turn = 0;
+        idxCurrent = 0;
+
+        this.players = new Player[noOfPlayers];
+        this.dices = new LinkedList<>();
+
+    
+        LevelReader levelObj = io.jsonParser(level);
+
+        for (int i = 0; i < players.length; i++) {
+            if (i == 0) {
+                players[i] = new Human(new Board(levelObj, level), false);
+                gui.initPointTable(level);
+            } else {
+                players[i] = new Bot(new Board(levelObj, level), true);
+            }
+        }
+
+        fillDices(noOfPlayers);
+        this.gui.addImgsToAllGridPanes(levelObj, noOfPlayers, level);
+        highlight = players[idxCurrent].getBoard().highlightList(dices);
+        highlight(highlight);
+        rolledAgain = false;
+
+    }
+    /**
+     * the constructor to load the game from loaded file
+     */
+    protected Game(){
+        
+    }
+    /**
+     * the constructor for testing 
+     */
+    protected Game(GUIConnector gui, Player[] players, int level){
+        
+    }
+    
+    /**
+     * this method is returning the array of player. 
+     * @return array of Player
+     */
+    public Player[] getPlayers() {
+        return players;
+    }
+
+    /**
+     * get the level of current playing game
+     * @return int the current level
+     */
+    public int getLevel() {
+        return level;
+    }
+    /**
+     * this method is returning the current round in which players are playing. 
+     * @return int current level
+     */
+    public int getRound() {
+        return round;
+    }
+    /**
+     * this method is returing the current turn in which players are playing. 
+     * @return int current turn
+     */
+    public int getTurn() {
+        return turn;
+    }
+    /**
+     * get the index of current player. 
+     * @return int index of current player
+     */
+    public int getIdxCurrent() {
+        return idxCurrent;
+    }
+    /**
+     * get the list of current dices that can be placed on the board
+     * @return list of integer of current dices
+     */
+    public List<Integer> getDices() {
+        return dices;
+    }
+    /**
+     * this method is filling the list of dices based on the number of players who plays
+     * for two players it is 7, for three players it is 10 and for four players it is 13 dices. 
+     * @param noOfPlayer int number players who players
+     */
+    private void fillDices(int noOfPlayer) {
+        Random rand = new Random();
+        dices.clear();
+
+        for (int i = 0; i < (noOfPlayer * 3 + 1); i++) {
+            dices.add((int) (Math.random() * ((6 - 1) + 1)) + 1);
+        }
+        Collections.sort(dices);
+        this.gui.setDicesOnGridPane(dices);
+    }
+    /**
+     * this method is controlling the players' turn. if a player's turn is finished,
+     * it will call this method to change the next player. This method is also checking if
+     * the game is ended based on end game condition. Also if the current player is bot player, 
+     * appropriate method will be called to do bot turn. 
+     */
+    void nextPlayer() {
+
+        if (!endGame()) {
+            if (dices.isEmpty() || dropedOutPlayer() == 0) {
+                if (turn == players.length - 1) {
+                    round++;
+                    turn = 0;
+                    subTurn = 0;
+                    idxCurrent = 0;
+                    
+                    crossOccupiedPositions();
+                    resetDropOut();
+                    fillDices(players.length);
+                } else {
+                    turn++;
+                    subTurn = 0;
+                    idxCurrent = turn;
+                    
+                    crossOccupiedPositions();
+                    resetDropOut();
+                    fillDices(players.length);
+                }
+            } else {
+                subTurn++;
+                idxCurrent = (idxCurrent + 1) % players.length;
+            }
+
+            if (players[idxCurrent].isBot()) {
+                botTurn();
+            }else{
+                if(players[idxCurrent].isDropOut()){
+                    nextPlayer();
+                }
+                highlight = players[idxCurrent].getBoard().highlightList(dices);
+            
+                highlight(highlight);
+                
+                if(highlight.isEmpty()){
+                    this.gui.setBtnDisable(false);
+                }
+            }
+
+        }
+    }
+    public void setDiceToBoard(Position pos){
+        
+        if(players[idxCurrent].getBoard().isValidPos(pos) &&  players[idxCurrent].getBoard().contiain(highlight, pos)){
+            System.out.println("in game set dice to Board"+ 
+                players[idxCurrent].getBoard().getField()[pos.getX()][pos.getY()].getValue());
+            System.out.println("isNeighbor" + isFilledNeighbor(pos));
+            
+            players[idxCurrent].getBoard().getField()[pos.getX()][pos.getY()].setOccupied(true);
+            gui.setDiceToBoard(players[idxCurrent].getBoard().getField()[pos.getX()][pos.getY()].getValue(), pos, idxCurrent);
+
+            removeFromDices(players[idxCurrent].getBoard().getField()[pos.getX()][pos.getY()].getValue());
+            removeHighlight(highlight);
+            if(dropedOutPlayer() == 1){
+                players[idxCurrent].setIsDropOut(true);
+                gui.showPenOnBoard(idxCurrent);
+            }
+            nextPlayer();
+            
+        }else{
+            if(rolledAgain && players[idxCurrent].getBoard().getField()[pos.getX()][pos.getY()].isOccupied()){
+                players[idxCurrent].getBoard().getField()[pos.getX()][pos.getY()].setOccupied(false);
+                gui.removeDiceFromBoard(pos, idxCurrent);
+                dices.add(players[idxCurrent].getBoard().getField()[pos.getX()][pos.getY()].getValue());
+                Collections.sort(dices);
+                gui.setDicesOnGridPane(dices);
+                rolledAgain = false;
+                if(dropedOutPlayer() == 1){
+                    players[idxCurrent].setIsDropOut(true);
+                    gui.showPenOnBoard(idxCurrent);
+                }
+                nextPlayer();
+            }
+        }
+        //nextPlayer();
+    }
+    /**
+     * this method is checking if the given position is neighboring to any of occupied or crossed 
+     * cells. then player is allow to play. 
+     * @param pos clicked position by user
+     * @return true if the given position is neighboring to occupied or crossed cell according the conditions
+     */
+    private boolean isFilledNeighbor(Position pos){
+        Position[] neighbors = pos.getNeighbors();
+        boolean isNeighbor = false;
+        for (int i = 0; i < neighbors.length; i++) {
+            if(players[idxCurrent].getBoard().isValidPos(neighbors[i])){
+                if(players[idxCurrent].getBoard().ifOccupied() && !players[idxCurrent].getBoard().inClosed()){
+                    if(players[idxCurrent].getBoard().getField()[neighbors[i].getX()][neighbors[i].getY()].isOccupied()){
+                        isNeighbor = true;
+                    }
+                }else{
+                    if(players[idxCurrent].getBoard().getField()[neighbors[i].getX()][neighbors[i].getY()].isCrossed()){
+                        isNeighbor = true;
+                    }
+                }
+            }
+        }
+        return isNeighbor;
+    }
+    /**
+     * when user clicked on roll again button, this method is called to shuffle the dices and 
+     * show new dices on dice area. then based on new dices a list will be calculated 
+     * to show the possible moves. 
+     * 
+     * at the end if the list is again empty, user will be dropped out automatically
+     */
+    private void rollAgainDices() {
+        Random rand = new Random();
+        int len = dices.size();
+        dices.clear();
+        for (int i = 0; i < len; i++) {
+            dices.add((int) (Math.random() * ((6 - 1) + 1)) + 1);
+        }
+        
+        Collections.sort(dices);
+        gui.setDicesOnGridPane(dices);
+        
+        highlight = players[idxCurrent].getBoard().highlightList(dices);
+        highlight(highlight);
+        
+        if(highlight.isEmpty()){
+            rolledAgain = true;
+            //players[idxCurrent].setIsDropOut(true);
+        }
+
+    }
+    /**
+     * when human player clicks on roll again button, the buttons will disable and 
+     * the remaining dices will be shuffled again to see if there is new 
+     */
+    public void rollAgainClicked() {
+        this.gui.setBtnDisable(true);
+        
+        rollAgainDices();
+    }
+    /**
+     * when user can not play, the user can drop out. 
+     * 
+     * it means that he/she will not play for this round
+     */
+    public void DropOutClicked() {
+        
+        this.gui.setBtnDisable(true);
+        this.gui.showPenOnBoard(idxCurrent);
+        players[idxCurrent].setIsDropOut(true);
+        nextPlayer();
+        
+    }
+    /**
+     * this method is checking if the players can play
+     * @return 
+     */
+    public boolean canPlay() {
+        boolean canPlay = true;
+
+        if (true) {
+
+        }
+
+        return canPlay;
+    }
+    /**
+     * if the current player is bot this player is called
+     */
+    private void botTurn() {
+//        if(!dices.isEmpty()){
+//            removeFromDices(dices.get(0));
+//        }
+System.out.println("bot Turn");
+          BotChoose choose = players[idxCurrent].ai(level, dices);
+          if(choose != null && !players[idxCurrent].isDropOut()){
+            int value = players[idxCurrent].getBoard().getField()[choose.getPos().getX()][choose.getPos().getY()].getValue();
+            players[idxCurrent].getBoard().getField()[choose.getPos().getX()][choose.getPos().getY()].setOccupied(true);
+            removeFromDices(value);
+            gui.setDiceToBoard(value, choose.getPos(), idxCurrent);
+              
+           if(dropedOutPlayer() == 1){
+               players[idxCurrent].setIsDropOut(true);
+               gui.showPenOnBoard(idxCurrent);
+           }
+            
+          }else{
+            if(!players[idxCurrent].isDropOut()){
+                players[idxCurrent].setIsDropOut(true);
+                gui.showPenOnBoard(idxCurrent);
+            }
+            
+          }
+            
+            nextPlayer();
+        
+    }
+    /**
+     * this method is checking if the game is finished. 
+     * the game will be finished when the current players board is full or
+     * all rounds are played completely. 
+     * @return true if current player's board is full or round are finished
+     */
+    boolean endGame() {
+        return false;
+    }
+    /**
+     * this method is receiving a list of possible moves for human player and pass 
+     * each nodes of the list which are Positions to gui show them on the board
+     * @param list positions of possible moves
+     */
+    private void highlight(List<Position> list){
+        for (int i = 0; i < list.size(); i++) {
+            this.gui.highlightPos(list.get(i));
+        }
+    }
+    /**
+     * this method is removing the already placed dice on the board from dice list and
+     * update the gui to show the list without removed value
+     * @param value int value aff dice to be removed
+     */
+    private void removeFromDices(int value){
+        System.out.println("value in remove from dice: "+ value);
+        boolean removed = false;
+        
+        for (int i = 0; i < dices.size() && !removed; i++) {
+            if(dices.get(i) == value){
+                removed = true;
+                dices.remove(i);
+            }
+        }
+        this.gui.setDicesOnGridPane(dices);
+    }
+    
+    /**
+     * after human player puts a dice on the board, this method is called to remove the 
+     * highlighted cell on the board. 
+     * @param list Postions, last possible moved which should be removed
+     */
+    private void removeHighlight(List<Position> list){
+        for (int i = 0; i < list.size(); i++) {
+            this.gui.removeHighlightPos(list.get(i));
+        }
+    }
+    /**
+     * this methos is reseting the droped out of the player ot false
+     */
+    private void resetDropOut(){
+        for (int i = 0; i < this.players.length; i++) {
+            if(players[i].isDropOut()){
+                this.gui.removePenFromBoard(i);
+                players[i].setIsDropOut(false);
+            }
+        }
+    }
+    private int dropedOutPlayer(){
+        int dropOut = players.length;
+        for (int i = 0; i < players.length; i++) {
+            if (players[i].isDropOut()) {
+                dropOut--;
+            }
+        }
+        return dropOut;
+    }
+    public void clear(){
+        gui.clear();
+    }
+    private void crossOccupiedPositions(){
+        for (int i = 0; i < players.length; i++) {
+            for (int j = 0; j < players[i].getBoard().getField().length; j++) {
+                for (int k = 0; k < players[i].getBoard().getField()[j].length; k++) {
+                    Position pos = new Position(j, k);
+                    
+                    if(players[i].getBoard().getField()[j][k] != null && players[i].getBoard().getField()[j][k].isOccupied()){
+                            players[i].getBoard().getField()[j][k].setCrossed(true);
+                            players[i].getBoard().getField()[j][k].setOccupied(false);
+                            
+                            gui.setCrossedPos(pos, i);
+                            
+                            
+                    }
+                }
+            }
+        }
+    }
+    
+}

@@ -1,0 +1,83 @@
+/*
+ * This application is a game project developed by Alireza Rezaei ITE102772
+ * The purpose is for Advanced Programming course.
+ */
+package logic;
+
+/**
+ *
+ * @author Rezaei
+ */
+public class Board {
+
+    LevelReader board;
+    private Cell[][] field;
+
+    Board(LevelReader board) {
+        this.board = board;
+        field = new Cell[board.getField().length][board.getField()[0].length];
+        setToField(board);
+    }
+
+    public Cell[][] getField() {
+        return field;
+    }
+
+    protected LevelReader getBoard() {
+        return this.board;
+    }
+
+    private void setToField(LevelReader board) {
+
+        for (int i = 0; i < board.getField().length; i++) {
+            for (int j = 0; j < board.getField()[i].length; j++) {
+                boolean isCross = false;
+                
+                if (board.getField()[i][j] == 0) {
+                    isCross = true;
+                }
+                Position pos = new Position(i, j);
+                ObjectTypes type = isObject(board, pos);           
+            }
+        }
+    }
+
+    private ObjectTypes isObject(LevelReader board, Position pos) {
+        ObjectTypes type = ObjectTypes.noType;
+        
+        type = isJewel(board, pos);
+        
+        return type;
+    }
+
+    private ObjectTypes isJewel(LevelReader board, Position pos) {
+        ObjectTypes type = ObjectTypes.noType;
+        for (int i = 0; i < board.getJewels().length && type == ObjectTypes.noType; i++) {
+            for (int j = 0; j < board.getJewels()[i].getPositions().length && type == ObjectTypes.noType; j++) {
+                if (board.getJewels()[i].getPositions()[j].equals(pos)) {
+                    if (board.getJewels()[i].getPoints() == 1) {
+                        type = ObjectTypes.jewelBlue;
+                    } else if (board.getJewels()[i].getPoints() == 2) {
+                        type = ObjectTypes.jewelYellow;
+                    } else {
+                        type = ObjectTypes.jewelRed;
+                    }
+                }
+            }
+        }
+        return type;
+    }
+
+    protected boolean isValidPos(Position pos) {
+        return isValidX(pos.getX()) && isValidY(pos.getY()) && this.board.getField()[pos.getX()][pos.getY()] != null;
+    }
+
+    private boolean isValidX(int x) {
+        return x >= this.board.getField().length && x < this.board.getField().length;
+    }
+
+    private boolean isValidY(int y) {
+        return y >= this.board.getField()[0].length && y < this.board.getField()[0].length;
+    }
+
+}
